@@ -1,0 +1,51 @@
+{
+  "projeto": "Citizen Tech Market - Marketplace de servicos ao cidadao",
+  "versao": "2.0",
+  "descricao": "Diagrama de Fluxo de Dados (DFD) nivel 1. Use os IDs deste arquivo no campo 'elemento' das suas ameacas.",
+  "atores": [
+    { "id": "A1", "nome": "Cidadao (navegador / aplicativo)" },
+    { "id": "A2", "nome": "Administrador da plataforma" },
+    { "id": "A3", "nome": "Provedor de pagamento (PSP)" },
+    { "id": "A4", "nome": "Servico antifraude externo" }
+  ],
+  "processos": [
+    { "id": "P1", "nome": "Proxy reverso / WAF" },
+    { "id": "P2", "nome": "Aplicacao Web (Flask)" },
+    { "id": "P3", "nome": "Servico de autenticacao (JWT)" },
+    { "id": "P4", "nome": "Servico de pedidos e pagamento" },
+    { "id": "P5", "nome": "Worker de filas" },
+    { "id": "P6", "nome": "Painel administrativo" }
+  ],
+  "depositos": [
+    { "id": "D1", "nome": "Banco de usuarios" },
+    { "id": "D2", "nome": "Banco de pedidos" },
+    { "id": "D3", "nome": "Cache de sessoes" },
+    { "id": "D4", "nome": "Fila de mensagens" },
+    { "id": "D5", "nome": "Bucket de notas fiscais" },
+    { "id": "D6", "nome": "Logs e trilha de auditoria" }
+  ],
+  "fluxos": [
+    { "id": "FL01", "origem": "A1", "destino": "P1", "dados": "requisicoes HTTPS (login, busca, compra)", "cruza": ["L1"] },
+    { "id": "FL02", "origem": "P1", "destino": "P2", "dados": "requisicoes HTTP encaminhadas", "cruza": ["L2"] },
+    { "id": "FL03", "origem": "P2", "destino": "P3", "dados": "usuario e senha", "cruza": [] },
+    { "id": "FL04", "origem": "P3", "destino": "D1", "dados": "consulta de credenciais (hash de senha)", "cruza": ["L3"] },
+    { "id": "FL05", "origem": "P3", "destino": "D3", "dados": "token de sessao (JWT)", "cruza": ["L3"] },
+    { "id": "FL06", "origem": "P2", "destino": "P4", "dados": "itens do pedido e dados do cartao tokenizado", "cruza": [] },
+    { "id": "FL07", "origem": "P4", "destino": "D2", "dados": "pedido, endereco e valor", "cruza": ["L3"] },
+    { "id": "FL08", "origem": "P4", "destino": "A3", "dados": "token do cartao e valor da cobranca", "cruza": ["L4"] },
+    { "id": "FL09", "origem": "P4", "destino": "A4", "dados": "CPF, IP e historico de compras", "cruza": ["L4"] },
+    { "id": "FL10", "origem": "P4", "destino": "D4", "dados": "mensagem serializada de emissao de nota", "cruza": ["L3"] },
+    { "id": "FL11", "origem": "D4", "destino": "P5", "dados": "mensagem serializada de emissao de nota", "cruza": ["L3"] },
+    { "id": "FL12", "origem": "P5", "destino": "D5", "dados": "arquivo XML/PDF da nota fiscal", "cruza": ["L3"] },
+    { "id": "FL13", "origem": "A2", "destino": "P1", "dados": "acesso ao painel (credenciais de administrador)", "cruza": ["L1"] },
+    { "id": "FL14", "origem": "P1", "destino": "P6", "dados": "comandos de gestao e relatorios", "cruza": ["L2"] },
+    { "id": "FL15", "origem": "P6", "destino": "D2", "dados": "consultas de relatorio", "cruza": ["L3"] },
+    { "id": "FL16", "origem": "P2", "destino": "D6", "dados": "eventos de acesso e de erro", "cruza": ["L3"] }
+  ],
+  "limites_de_confianca": [
+    { "id": "L1", "nome": "Internet <-> DMZ" },
+    { "id": "L2", "nome": "DMZ <-> Rede de aplicacao" },
+    { "id": "L3", "nome": "Rede de aplicacao <-> Camada de dados" },
+    { "id": "L4", "nome": "Rede interna <-> Terceiros" }
+  ]
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><meta charset="utf-8"><title>Citizen Tech Market</title></head>
+<body style="font-family:Arial;background:#111;color:#fff">
+  <h1 style="color:#ED145B">Citizen Tech Market</h1>
+  <p>Bem-vindo(a), {{ nome|safe }}!</p>
+  <ul>
+    <li><a href="/busca?q=certidao">Buscar servicos</a></li>
+    <li><a href="/produto?id=1">Servico em destaque</a></li>
+    <li><a href="/saudacao?nome=cidadao">Saudacao</a></li>
+    <li><a href="/ir?url=/busca">Ir para a busca</a></li>
+    <li><a href="/arquivo?nome=termos.txt">Termos de uso</a></li>
+    <li><a href="/diagnostico?host=127.0.0.1">Diagnostico de rede</a></li>
+    <li><a href="/calc?expr=2%2B2">Calculadora de taxas</a></li>
+    <li><a href="/consulta-externa?url=http://127.0.0.1">Consulta externa</a></li>
+    <li><a href="/admin/relatorio?mes=01">Relatorio mensal</a></li>
+  </ul>
+  <form action="/login" method="post">
+    <input name="usuario" placeholder="usuario">
+    <input name="senha" type="password" placeholder="senha">
+    <button type="submit">Entrar</button>
+  </form>
+</body>
+</html>

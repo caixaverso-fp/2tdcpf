@@ -1,0 +1,4 @@
+Pillow==@@PILLOW@@
+lxml==@@LXML@@
+cryptography==2.3
+paramiko==2.4.0

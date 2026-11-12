@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    ports:
+      - "@@PORTA@@:@@PORTA@@"
+    environment:
+      PORTA: "@@PORTA@@"
+  banco:
+    image: postgres:11
+    environment:
+      POSTGRES_USER: market
+      POSTGRES_PASSWORD: @@G10@@
